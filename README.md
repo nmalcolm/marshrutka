@@ -32,6 +32,10 @@ The `server` acts as a relay between the `agent`s and the `client`.
 
 Before compiling change `secret_key` and `additional_field_value` (the admin password).
 
+## Building
+
+Run `cargo build --release` and the executables will be in the `./target/release` directory.
+
 ## Limitations and areas of concern
 
 - The network message buffer has a fixed length of 500,000 bytes. If the buffer exceeds this an `UnknownCryptoError` will occur. This may happen for example when the command output is exceptionally large.
