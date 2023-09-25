@@ -1,0 +1,18 @@
+[package]
+name = "agent"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde_json = "1.0"
+hostname = "0.3.1"
+machine-uid = "0.5.1"
+tokio = { version = "1", features = ["full"] }
+orion = "0.17.6"
+reqwest = { version = "0.11.20", features = ["blocking"] }
+sysinfo = "0.29.10"
+winreg = { version = "0.7", optional = true }
+whoami = "0.7"
+rand = "0.8.5"
