@@ -1,5 +1,7 @@
 # Marshrutka C2
 
+![Rust workflow](https://github.com/nmalcolm/marshrutka/actions/workflows/rust.yml/badge.svg) ![License](https://img.shields.io/github/license/nmalcolm/marshrutka)
+
 Marshrutka is a example command and control server, agent, and client written in Rust. It use authenticated secret-key encryption with XChaCha20Poly1305 over TCP for network communcation. 
 
 Marshrutka's development began on the 19th of September 2023 and concluded on the 26th of September 2023. It's intentionally left unfinished and feature incomplete, but stable enough to run.
