@@ -48,3 +48,4 @@ Run `cargo build --release` and the executables will be in the `./target/release
 - The `client` and `server` have a rudimentary password-based authentication system using a hardcoded password and the admin commands are encrypted using the same key.
 - The `client` doesn't automatically re-render the prompt after receiving command output.
 - The server doesn't implement any rate limiting.
+- Use of `unwrap()` may cause panics.
