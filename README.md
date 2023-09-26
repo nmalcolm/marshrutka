@@ -24,7 +24,7 @@ Before compiling change `secret_key`, `SERVER_IP`, and `SERVER_PORT`.
 
 ## Client
 
-The `client`` is the interactive CLI app for viewing and controlling agents.
+The `client` is the interactive CLI app for viewing and controlling agents.
 
 Before compiling change `secret_key` and `additional_field_value` (the admin password).
 
@@ -50,4 +50,4 @@ Run `cargo build --release` and the executables will be in the `./target/release
 - The `client` and `server` have a rudimentary password-based authentication system using a hardcoded password and the admin commands are encrypted using the same key.
 - The `client` doesn't automatically re-render the prompt after receiving command output.
 - The server doesn't implement any rate limiting.
-- Use of `unwrap()` may cause panics.
+- The use of `unwrap()` may cause panics.
