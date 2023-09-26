@@ -15,13 +15,13 @@ use std::thread;
 use std::time::Duration;
 
 fn main() -> Result<()> {
-    let ascii_art = r#"
+    let ascii_art = r"
                          _                _   _         
     /\/\   __ _ _ __ ___| |__  _ __ _   _| |_| | ____ _ 
    /    \ / _` | '__/ __| '_ \| '__| | | | __| |/ / _` |
   / /\/\ \ (_| | |  \__ \ | | | |  | |_| | |_|   < (_| |
   \/    \/\__,_|_|  |___/_| |_|_|   \__,_|\__|_|\_\__,_|
-    "#;
+    ";
 
     println!(
         "{}\n  Client version {} | Created by Nathan Malcolm, use responsibly!\n",
@@ -480,7 +480,7 @@ fn connect_to_server() -> Result<TcpStream, Error> {
     let address = matches.value_of("address").unwrap();
     let port = matches.value_of("port").unwrap();
 
-    return TcpStream::connect(format!("{}:{}", address, port));
+    TcpStream::connect(format!("{}:{}", address, port))
 }
 
 fn send_message(

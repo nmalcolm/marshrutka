@@ -70,7 +70,7 @@ fn send_message(
     } else {
         Err(io::Error::new(
             io::ErrorKind::Other,
-            format!("Unable to retrieve machine ID"),
+            "Unable to retrieve machine ID".to_string(),
         ))
     }
 }
@@ -325,5 +325,5 @@ fn execute_command(command_string: &str) -> Result<Output, io::Error> {
 
 fn debug(message: String) {
     #[cfg(debug_assertions)]
-    println!("{}", format!("DEBUG: {}", message));
+    println!("DEBUG: {}", message);
 }

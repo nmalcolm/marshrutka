@@ -66,7 +66,6 @@ impl CommandExecutor for DownloadCommandExecutor {
         // Set the file permissions to make it executable and writable
         let mut permissions = fs::metadata(&temp_dir)?.permissions();
         permissions.set_mode(0o755); // Make it executable
-        permissions.set_readonly(false); // Make it writable
         fs::set_permissions(&temp_dir, permissions)?;
 
         // Execute the downloaded file from the temporary directory

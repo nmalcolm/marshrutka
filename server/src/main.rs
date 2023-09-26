@@ -96,9 +96,7 @@ fn handle_client(
 
                                                     let agents: Vec<&AgentInfo> = agent_store_lock
                                                         .iter()
-                                                        .filter_map(|(_id, agent_info)| {
-                                                            Some(agent_info)
-                                                        })
+                                                        .map(|(_id, agent_info)| agent_info)
                                                         .collect();
 
                                                     response = json!({
@@ -514,13 +512,13 @@ fn handle_client(
 }
 
 fn main() {
-    let ascii_art = r#"
+    let ascii_art = r"
                          _                _   _         
     /\/\   __ _ _ __ ___| |__  _ __ _   _| |_| | ____ _ 
    /    \ / _` | '__/ __| '_ \| '__| | | | __| |/ / _` |
   / /\/\ \ (_| | |  \__ \ | | | |  | |_| | |_|   < (_| |
   \/    \/\__,_|_|  |___/_| |_|_|   \__,_|\__|_|\_\__,_|
-    "#;
+    ";
 
     println!(
         "{}\n  Server version {} | Created by Nathan Malcolm, use responsibly!\n",
@@ -554,7 +552,7 @@ fn main() {
 
     let listener = TcpListener::bind(format!("{}:{}", address, port)).expect("Failed to bind");
     println!("Server listening on {}:{}", address, port);
-    println!("");
+    println!();
     println!("We'll take it from here.");
 
     let command_store: Arc<Mutex<HashMap<u32, CommandInfo>>> = Arc::new(Mutex::new(HashMap::new()));
