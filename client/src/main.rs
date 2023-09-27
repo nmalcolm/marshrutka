@@ -1,6 +1,6 @@
 use anyhow::Result;
 use chrono::Utc;
-use clap::{App, Arg};
+use clap::Parser;
 use colored::Colorize;
 use inquire::Select;
 use inquire::Text;
@@ -13,6 +13,19 @@ use std::net::TcpStream;
 use std::process;
 use std::thread;
 use std::time::Duration;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// IP address of the C2 server
+    #[arg(short, long, default_value = "127.0.0.1")]
+    address: String,
+
+    /// Port number of the C2 server
+    #[arg(short, long, default_value_t = 8000)]
+    port: u32,
+}
+
 
 fn main() -> Result<()> {
     let ascii_art = r"
@@ -456,31 +469,9 @@ fn main() -> Result<()> {
 }
 
 fn connect_to_server() -> Result<TcpStream, Error> {
-    let matches = App::new("Marshrutka Client")
-        .arg(
-            Arg::with_name("address")
-                .short("a")
-                .long("address")
-                .value_name("ADDRESS")
-                .default_value("127.0.0.1")
-                .help("Sets the server address")
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("port")
-                .short("p")
-                .long("port")
-                .value_name("PORT")
-                .default_value("8000")
-                .help("Sets the server port")
-                .takes_value(true),
-        )
-        .get_matches();
+    let args = Args::parse();
 
-    let address = matches.value_of("address").unwrap();
-    let port = matches.value_of("port").unwrap();
-
-    TcpStream::connect(format!("{}:{}", address, port))
+    TcpStream::connect(format!("{}:{}", args.address, args.port))
 }
 
 fn send_message(
@@ -564,9 +555,9 @@ fn format_agent_name(
     )
 }
 
-fn debug(message: String) {
+fn debug(_message: String) {
     #[cfg(debug_assertions)]
-    println!("{}", format!("DEBUG: {}\r", message).blue());
+    println!("{}", format!("DEBUG: {}\r", _message).blue());
 }
 
 fn print_command_output(message: String) {

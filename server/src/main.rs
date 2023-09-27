@@ -1,5 +1,5 @@
 use chrono::Utc;
-use clap::{App, Arg};
+use clap::Parser;
 use colored::Colorize;
 use fnv::FnvHasher;
 use orion::aead::{open, SecretKey};
@@ -37,6 +37,18 @@ struct CommandInfo {
 struct CommandOutput {
     agent_id: u32,
     output: String,
+}
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// IP address of the C2 server
+    #[arg(short, long, default_value = "127.0.0.1")]
+    address: String,
+
+    /// Port number of the C2 server
+    #[arg(short, long, default_value_t = 8000)]
+    port: u32,
 }
 
 fn handle_client(
@@ -526,32 +538,10 @@ fn main() {
         env!("CARGO_PKG_VERSION")
     );
 
-    let matches = App::new("Marshrutka Server")
-        .arg(
-            Arg::with_name("address")
-                .short("a")
-                .long("address")
-                .value_name("ADDRESS")
-                .default_value("127.0.0.1")
-                .help("Sets the server address")
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("port")
-                .short("p")
-                .long("port")
-                .value_name("PORT")
-                .default_value("8000")
-                .help("Sets the server port")
-                .takes_value(true),
-        )
-        .get_matches();
+    let args = Args::parse();
 
-    let address = matches.value_of("address").unwrap();
-    let port = matches.value_of("port").unwrap();
-
-    let listener = TcpListener::bind(format!("{}:{}", address, port)).expect("Failed to bind");
-    println!("Server listening on {}:{}", address, port);
+    let listener = TcpListener::bind(format!("{}:{}", args.address, args.port)).expect("Failed to bind");
+    println!("Server listening on {}:{}", args.address, args.port);
     println!();
     println!("We'll take it from here.");
 
@@ -581,7 +571,7 @@ fn main() {
     }
 }
 
-fn debug(message: String) {
+fn debug(_message: String) {
     #[cfg(debug_assertions)]
-    println!("{}", format!("DEBUG: {}", message).blue());
+    println!("{}", format!("DEBUG: {}", _message).blue());
 }

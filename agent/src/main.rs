@@ -323,7 +323,7 @@ fn execute_command(command_string: &str) -> Result<Output, io::Error> {
     Ok(output)
 }
 
-fn debug(message: String) {
+fn debug(_message: String) {
     #[cfg(debug_assertions)]
-    println!("DEBUG: {}", message);
+    println!("DEBUG: {}", _message);
 }
