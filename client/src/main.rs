@@ -556,7 +556,7 @@ fn debug(_message: String) {
 }
 
 fn print_command_output(message: String) {
-    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+    print!("{esc}[999;1H", esc = 27 as char);
     // This should never panic
     io::stdout().flush().unwrap();
 

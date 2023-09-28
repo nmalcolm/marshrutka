@@ -51,3 +51,4 @@ Run `cargo build --release` and the executables will be in the `./target/release
 - The `client` doesn't automatically re-render the prompt after receiving command output.
 - The server doesn't implement any rate limiting.
 - The use of `unwrap()` may cause panics.
+- There's a lack of URL validation on the `download` module.
