@@ -26,6 +26,15 @@ struct Args {
     port: u32,
 }
 
+// Define your hardcoded key (ew don't do this ever) as a byte array
+const HARDCODED_KEY: [u8; 32] = [
+    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
+    0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A,
+    0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
+];
+
+const HARDCODED_PASSWORD: &str = "c7wkzzDlyzLWEspDBzEkU5usC5eIn7Qr";
+
 
 fn main() -> Result<()> {
     let ascii_art = r"
@@ -43,12 +52,7 @@ fn main() -> Result<()> {
     );
 
     let thread1 = thread::spawn(move || -> Result<()> {
-        let secret_key: [u8; 32] = [
-            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
-            0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C,
-            0x1D, 0x1E, 0x1F, 0x20,
-        ];
-        let secret_key = SecretKey::from_slice(&secret_key)?;
+        let secret_key = SecretKey::from_slice(&HARDCODED_KEY)?;
 
         loop {
             match connect_to_server() {
@@ -113,21 +117,17 @@ fn main() -> Result<()> {
                                         Ok(choice) => {
                                             println!("Selected agent: {}", choice);
 
-                                            let selected_agent_id =
-                                                agents.iter().find_map(|agent| {
-                                                    if let Some(agent_id) =
-                                                        agent.get("id").and_then(|id| id.as_u64())
-                                                    {
-                                                        let this_agent_id = agent
-                                                            .get("id")
-                                                            .and_then(|id| id.as_u64())
-                                                            .unwrap();
-                                                        if agent_id == this_agent_id {
-                                                            return Some(agent_id as u32);
-                                                        }
+                                            let selected_agent_id = agents.iter().find_map(|agent| {
+                                                if let (Some(agent_id), Some(this_agent_id)) = (
+                                                    agent.get("id").and_then(|id| id.as_u64()),
+                                                    agent.get("id").and_then(|id| id.as_u64())
+                                                ) {
+                                                    if agent_id == this_agent_id {
+                                                        return Some(agent_id as u32);
                                                     }
-                                                    None
-                                                });
+                                                }
+                                                None
+                                            });
 
                                             // Check if the agent ID was found
                                             if let Some(agent_id) = selected_agent_id {
@@ -413,12 +413,7 @@ fn main() -> Result<()> {
     });
 
     let thread2 = thread::spawn(move || -> Result<()> {
-        let secret_key: [u8; 32] = [
-            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
-            0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C,
-            0x1D, 0x1E, 0x1F, 0x20,
-        ];
-        let secret_key = SecretKey::from_slice(&secret_key)?;
+        let secret_key = SecretKey::from_slice(&HARDCODED_KEY)?;
 
         loop {
             match connect_to_server() {
@@ -461,7 +456,7 @@ fn main() -> Result<()> {
         // Ok(())
     });
 
-    // Wait for both threads to finish
+    // These threads will never finish
     let _ = thread1.join().unwrap();
     let _ = thread2.join().unwrap();
 
@@ -481,7 +476,7 @@ fn send_message(
 ) -> Result<(), Error> {
     // Add another field dynamically
     let additional_field_name = "password";
-    let additional_field_value = "c7wkzzDlyzLWEspDBzEkU5usC5eIn7Qr";
+    let additional_field_value = HARDCODED_PASSWORD;
     let additional_field = json!(additional_field_value);
 
     if let Value::Object(ref mut map) = message {
@@ -562,6 +557,7 @@ fn debug(_message: String) {
 
 fn print_command_output(message: String) {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+    // This should never panic
     io::stdout().flush().unwrap();
 
     let mut modified_message = format!(

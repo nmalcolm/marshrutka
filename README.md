@@ -20,19 +20,19 @@ Built-in Modules:
 - System Info: Fetch basic system information.
 - Kill Agent: Instruct the agent to exit.
 
-Before compiling change `secret_key`, `SERVER_IP`, and `SERVER_PORT`.
+Before compiling change `HARDCODED_KEY`, `SERVER_IP`, and `SERVER_PORT`.
 
 ## Client
 
 The `client` is the interactive CLI app for viewing and controlling agents.
 
-Before compiling change `secret_key` and `additional_field_value` (the admin password).
+Before compiling change `HARDCODED_KEY` and `HARDCODED_PASSWORD` (the admin password).
 
 ## Server
 
 The `server` acts as a relay between the `agent`s and the `client`.
 
-Before compiling change `secret_key` and `additional_field_value` (the admin password).
+Before compiling change `HARDCODED_KEY` and `HARDCODED_PASSWORD` (the admin password).
 
 ## Building
 

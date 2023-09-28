@@ -14,8 +14,6 @@ use std::net::{TcpListener, TcpStream};
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-extern crate fnv;
-
 #[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct AgentInfo {
@@ -51,6 +49,15 @@ struct Args {
     port: u32,
 }
 
+// Define your hardcoded key (ew don't do this ever) as a byte array
+const HARDCODED_KEY: [u8; 32] = [
+    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
+    0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A,
+    0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
+];
+
+const HARDCODED_PASSWORD: &str = "c7wkzzDlyzLWEspDBzEkU5usC5eIn7Qr";
+
 fn handle_client(
     mut stream: TcpStream,
     command_store: Arc<Mutex<HashMap<u32, CommandInfo>>>,
@@ -62,14 +69,9 @@ fn handle_client(
         match stream.read(&mut buffer) {
             Ok(bytes_read) if bytes_read == 0 => break,
             Ok(bytes_read) => {
-                // Define your hardcoded key as a byte array
-                let hardcoded_key: [u8; 32] = [
-                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
-                    0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A,
-                    0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
-                ];
+                // The key is hardcoded so `unwrap()` should never fail.
+                let secret_key = SecretKey::from_slice(&HARDCODED_KEY).unwrap();
 
-                let secret_key = SecretKey::from_slice(&hardcoded_key).unwrap();
                 match open(&secret_key, &buffer[0..bytes_read]) {
                     Ok(decrypted_message) => {
                         // Successfully decrypted the message
@@ -88,7 +90,7 @@ fn handle_client(
 
                                 if let Some(password) = success_value["password"].as_str() {
                                     debug(String::from("request has password"));
-                                    if password != "c7wkzzDlyzLWEspDBzEkU5usC5eIn7Qr" {
+                                    if password != HARDCODED_PASSWORD {
                                         debug(String::from("password invalid"));
                                         response = json!({
                                             "error": "Invalid password"
@@ -167,6 +169,7 @@ fn handle_client(
                                                             }
                                                         }
 
+                                                        // This should always be a u32 since the agent forces it to be 
                                                         let agent_id_u32 =
                                                             agent_id.parse::<u32>().unwrap();
 
