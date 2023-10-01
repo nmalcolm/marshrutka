@@ -52,3 +52,4 @@ Run `cargo build --release` and the executables will be in the `./target/release
 - The server doesn't implement any rate limiting.
 - The use of `unwrap()` may cause panics.
 - There's a lack of URL validation on the `download` module.
+- There isn't any TCP connection reuse, `connect_to_server()` is called multiple times
