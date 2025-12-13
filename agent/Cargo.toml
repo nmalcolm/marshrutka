@@ -14,5 +14,5 @@ orion = "0.17.6"
 reqwest = { version = "0.11.20", features = ["blocking"] }
 sysinfo = "0.29.10"
 winreg = { version = "0.51.0", optional = true }
-whoami = "1.4.1"
+whoami = "1.5.0"
 rand = "0.8.5"
